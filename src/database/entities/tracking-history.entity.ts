@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 import { BaseEntity } from './base.entity';
-import { OrderEntity } from './order.entity';
+import { OrderEntity } from '../../modules/orders/entities/order.entity';
 import { OrderStatus } from '../../common/enums/order-status.enum';
 
 @Entity('tracking_history')

@@ -6,9 +6,9 @@ import {
     Unique,
 } from 'typeorm';
 
-import { BaseEntity } from './base.entity';
-import { CourierPartner } from '../../common/enums/courier-partner.enum';
-import { OrderStatus } from '../../common/enums/order-status.enum';
+import { BaseEntity } from '../../../database/entities/base.entity';
+import { CourierPartner } from '../../../common/enums/courier-partner.enum';
+import { OrderStatus } from '../../../common/enums/order-status.enum';
 
 @Entity('orders')
 @Unique(['internalOrderId', 'courierPartner'])

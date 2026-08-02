@@ -26,7 +26,6 @@ export class OrdersService {
         return this.orderRepository.create({
             internalOrderId: dto.internalOrderId,
             courierPartner: dto.courierPartner,
-            idempotencyKey: dto.idempotencyKey,
         });
     }
 }

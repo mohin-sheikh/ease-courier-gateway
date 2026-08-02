@@ -3,7 +3,7 @@ import 'dotenv/config';
 import { DataSource } from 'typeorm';
 
 import { AuditLogEntity } from '../../modules/audit/entities/audit-log.entity';
-import { CourierTokenEntity } from '../../modules/auth/entities/courier-token.entity';
+import { CourierTokenEntity } from '../../couriers/shared/entities/courier-token.entity';
 import { BatchEntity } from '../../modules/batch/entities/batch.entity';
 import { BatchItemEntity } from '../../modules/batch/entities/batch-item.entity';
 import { OrderEntity } from '../../modules/orders/entities/order.entity';

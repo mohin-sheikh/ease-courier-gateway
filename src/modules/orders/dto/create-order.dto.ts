@@ -1,27 +1,36 @@
 import {
+    IsArray,
     IsEnum,
-    IsNotEmpty,
-    IsObject,
     IsOptional,
     IsString,
-    MaxLength,
+    ValidateNested,
 } from 'class-validator';
+
+import { Type } from 'class-transformer';
+
 import { CourierPartner } from '../../../common/enums/courier-partner.enum';
+
+import { CustomerDto } from './customer.dto';
+import { AddressDto } from './address.dto';
+import { OrderItemDto } from './order-item.dto';
 
 export class CreateOrderDto {
     @IsString()
-    @IsNotEmpty()
-    @MaxLength(100)
     internalOrderId!: string;
 
     @IsEnum(CourierPartner)
     courierPartner!: CourierPartner;
 
-    @IsOptional()
-    @IsString()
-    @MaxLength(255)
-    idempotencyKey?: string;
+    @ValidateNested()
+    @Type(() => CustomerDto)
+    customer!: CustomerDto;
 
-    @IsObject()
-    payload!: Record<string, unknown>;
+    @ValidateNested()
+    @Type(() => AddressDto)
+    address!: AddressDto;
+
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => OrderItemDto)
+    items!: OrderItemDto[];
 }

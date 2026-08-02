@@ -2,7 +2,6 @@ import {
     Column,
     Entity,
     Index,
-    OneToMany,
     Unique,
 } from 'typeorm';
 
@@ -17,6 +16,7 @@ import { OrderStatus } from '../../../common/enums/order-status.enum';
 @Index(['courierTrackingNumber'])
 export class OrderEntity extends BaseEntity {
     @Column({
+        unique: true,
         length: 100,
     })
     internalOrderId!: string;
@@ -29,13 +29,13 @@ export class OrderEntity extends BaseEntity {
 
     @Column({
         nullable: true,
-        length: 150,
+        length: 100,
     })
     courierShipmentId?: string;
 
     @Column({
         nullable: true,
-        length: 150,
+        length: 100,
     })
     courierTrackingNumber?: string;
 
@@ -51,4 +51,16 @@ export class OrderEntity extends BaseEntity {
         unique: true,
     })
     idempotencyKey?: string;
+
+    @Column({
+        type: 'jsonb',
+        nullable: true,
+    })
+    requestPayload?: Record<string, unknown>;
+
+    @Column({
+        type: 'jsonb',
+        nullable: true,
+    })
+    responsePayload?: Record<string, unknown>;
 }

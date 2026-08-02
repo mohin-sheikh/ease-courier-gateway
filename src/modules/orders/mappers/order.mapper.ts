@@ -1,17 +1,19 @@
-import { OrderEntity } from '../entities/order.entity';
-import { OrderResponseDto } from '../dto/order-response.dto';
+import { Injectable } from '@nestjs/common';
 
+import { OrderEntity } from '../entities/order.entity';
+import { CreateOrderResponseDto } from '../dto/create-order-response.dto';
+
+@Injectable()
 export class OrderMapper {
-    static toResponse(entity: OrderEntity): OrderResponseDto {
+    toCreateResponse(
+        entity: OrderEntity,
+    ): CreateOrderResponseDto {
         return {
-            id: entity.id,
-            internalOrderId: entity.internalOrderId,
-            courierPartner: entity.courierPartner,
-            courierShipmentId: entity.courierShipmentId,
-            courierTrackingNumber: entity.courierTrackingNumber,
+            success: true,
+            orderId: entity.id,
+            shipmentId: entity.courierShipmentId,
+            awb: entity.courierTrackingNumber,
             status: entity.status,
-            createdAt: entity.createdAt,
-            updatedAt: entity.updatedAt,
         };
     }
 }

@@ -1,8 +1,11 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import {
+    ConflictException,
+    Injectable,
+} from '@nestjs/common';
 
-import { OrderRepository } from '../repositories/order.repository';
 import { CreateOrderDto } from '../dto/create-order.dto';
 import { OrderEntity } from '../entities/order.entity';
+import { OrderRepository } from '../repositories/order.repository';
 
 @Injectable()
 export class OrdersService {
@@ -10,7 +13,10 @@ export class OrdersService {
         private readonly orderRepository: OrderRepository,
     ) { }
 
-    async create(dto: CreateOrderDto): Promise<OrderEntity> {
+    async create(
+        dto: CreateOrderDto,
+    ): Promise<OrderEntity> {
+
         const existing =
             await this.orderRepository.findByInternalOrderId(
                 dto.internalOrderId,
@@ -19,13 +25,16 @@ export class OrdersService {
 
         if (existing) {
             throw new ConflictException(
-                'Order already exists for this courier.',
+                'Order already exists.',
             );
         }
 
         return this.orderRepository.create({
             internalOrderId: dto.internalOrderId,
             courierPartner: dto.courierPartner,
+            requestPayload: JSON.parse(
+                JSON.stringify(dto),
+            ),
         });
     }
 }

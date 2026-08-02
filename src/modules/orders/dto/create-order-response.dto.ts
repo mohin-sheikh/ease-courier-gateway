@@ -1,9 +1,13 @@
-export class CreateOrderResponseDto {
-    order!: {
-        id: string;
-        internalOrderId: string;
-        status: string;
-    };
+import { OrderStatus } from '../../../common/enums/order-status.enum';
 
-    message!: string;
+export class CreateOrderResponseDto {
+    success!: boolean;
+
+    orderId!: string;
+
+    shipmentId?: string;
+
+    awb?: string;
+
+    status!: OrderStatus;
 }

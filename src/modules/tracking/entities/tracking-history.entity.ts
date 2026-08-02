@@ -6,9 +6,9 @@ import {
     ManyToOne,
 } from 'typeorm';
 
-import { BaseEntity } from './base.entity';
-import { OrderEntity } from '../../modules/orders/entities/order.entity';
-import { OrderStatus } from '../../common/enums/order-status.enum';
+import { BaseEntity } from '../../../shared/database/base.entity';
+import { OrderEntity } from '../../orders/entities/order.entity';
+import { OrderStatus } from '../../../common/enums/order-status.enum';
 
 @Entity('tracking_history')
 @Index(['order'])

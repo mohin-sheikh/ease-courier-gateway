@@ -6,7 +6,7 @@ import {
     Unique,
 } from 'typeorm';
 
-import { BaseEntity } from '../../../database/entities/base.entity';
+import { BaseEntity } from '../../../shared/database/base.entity';
 import { CourierPartner } from '../../../common/enums/courier-partner.enum';
 import { OrderStatus } from '../../../common/enums/order-status.enum';
 

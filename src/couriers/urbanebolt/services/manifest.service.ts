@@ -11,7 +11,7 @@ export class ManifestService {
     ) { }
 
     async createShipment(
-        payload: Record<string, unknown>,
+        payload: Record<string, unknown>[],
     ): Promise<Record<string, unknown>> {
 
         const token =

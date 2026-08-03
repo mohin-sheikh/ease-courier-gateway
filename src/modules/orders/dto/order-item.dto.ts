@@ -1,20 +1,15 @@
-import {
-    IsInt,
-    IsNumber,
-    IsPositive,
-    IsString,
-} from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
 export class OrderItemDto {
-    @IsString()
-    name!: string;
 
-    @IsInt()
-    @IsPositive()
-    quantity!: number;
+    @IsString()
+    sku!: string;
+
+    @IsString()
+    description!: string;
 
     @IsNumber()
-    weight!: number;
+    quantity!: number;
 
     @IsNumber()
     price!: number;

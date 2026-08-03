@@ -1,14 +1,14 @@
-import { IsEmail, IsMobilePhone, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsEmail, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
 
 export class CustomerDto {
+
     @IsString()
-    @MaxLength(100)
     name!: string;
 
-    @IsMobilePhone('en-IN')
+    @IsPhoneNumber('IN')
     mobile!: string;
 
-    @IsOptional()
     @IsEmail()
+    @IsOptional()
     email?: string;
 }

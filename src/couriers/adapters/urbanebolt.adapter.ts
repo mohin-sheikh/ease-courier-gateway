@@ -6,10 +6,12 @@ import { CreateShipmentResponseDto } from '../dto/create-shipment-response.dto';
 import { UrbaneboltAuthService } from '../urbanebolt/auth/urbanebolt-auth.service';
 import { UrbaneboltHttpClient } from '../urbanebolt/client/urbanebolt-http.client';
 import { ManifestService } from '../urbanebolt/services/manifest.service';
+import { UrbaneboltManifestMapper } from '../urbanebolt/mapper/urbanebolt-manifest.mapper';
 
 @Injectable()
 export class UrbaneboltAdapter implements CourierInterface {
     constructor(
+        private readonly mapper: UrbaneboltManifestMapper,
         private readonly manifestService: ManifestService,
     ) { }
 
@@ -17,13 +19,7 @@ export class UrbaneboltAdapter implements CourierInterface {
         dto: CreateOrderDto,
     ): Promise<CreateShipmentResponseDto> {
 
-        const payload = {
-            order_number: dto.internalOrderId,
-
-            customer_name: dto.customer.name,
-
-            customer_mobile: dto.customer.mobile,
-        };
+        const payload = this.mapper.map(dto);
 
         const response =
             await this.manifestService.createShipment(

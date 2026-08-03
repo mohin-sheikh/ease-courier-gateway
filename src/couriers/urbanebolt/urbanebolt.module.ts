@@ -7,6 +7,7 @@ import { UrbaneboltAuthClient } from './auth/urbanebolt-auth.client';
 import { UrbaneboltAuthService } from './auth/urbanebolt-auth.service';
 
 import { ManifestService } from './services/manifest.service';
+import { UrbaneboltManifestMapper } from './mapper/urbanebolt-manifest.mapper';
 
 @Module({
     providers: [
@@ -15,6 +16,7 @@ import { ManifestService } from './services/manifest.service';
         UrbaneboltAuthClient,
         UrbaneboltAuthService,
         ManifestService,
+        UrbaneboltManifestMapper,
     ],
     exports: [
         UrbaneboltApiClient,
@@ -22,6 +24,7 @@ import { ManifestService } from './services/manifest.service';
         UrbaneboltAuthClient,
         UrbaneboltAuthService,
         ManifestService,
+        UrbaneboltManifestMapper,
     ],
 })
 export class UrbaneboltModule { }

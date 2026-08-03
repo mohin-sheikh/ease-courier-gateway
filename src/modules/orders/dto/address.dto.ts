@@ -1,19 +1,9 @@
-import {
-    IsOptional,
-    IsPostalCode,
-    IsString,
-    MaxLength,
-} from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class AddressDto {
-    @IsString()
-    @MaxLength(200)
-    line1!: string;
 
-    @IsOptional()
     @IsString()
-    @MaxLength(200)
-    line2?: string;
+    address!: string;
 
     @IsString()
     city!: string;
@@ -24,6 +14,6 @@ export class AddressDto {
     @IsString()
     country!: string;
 
-    @IsPostalCode('IN')
+    @IsString()
     pincode!: string;
 }

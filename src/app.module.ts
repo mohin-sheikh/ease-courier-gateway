@@ -11,7 +11,6 @@ import { TrackingModule } from './modules/tracking/tracking.module';
 
 @Module({
   imports: [
-
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
@@ -30,4 +29,4 @@ import { TrackingModule } from './modules/tracking/tracking.module';
   controllers: [AppController],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}

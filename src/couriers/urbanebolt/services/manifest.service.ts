@@ -7,22 +7,20 @@ import { ManifestResponseDto } from '../dto/manifest-response.dto';
 
 @Injectable()
 export class ManifestService {
-    constructor(
-        private readonly authService: UrbaneboltAuthService,
-        private readonly httpClient: UrbaneboltHttpClient,
-    ) { }
+  constructor(
+    private readonly authService: UrbaneboltAuthService,
+    private readonly httpClient: UrbaneboltHttpClient,
+  ) {}
 
-    async createShipment(
-        payload: ManifestRequestDto[],
-    ): Promise<ManifestResponseDto> {
+  async createShipment(
+    payload: ManifestRequestDto[],
+  ): Promise<ManifestResponseDto> {
+    const token = await this.authService.getAccessToken();
 
-        const token =
-            await this.authService.getAccessToken();
-
-        return this.httpClient.post<ManifestResponseDto>(
-            '/api/v1/services/manifest/',
-            payload,
-            token,
-        );
-    }
+    return this.httpClient.post<ManifestResponseDto>(
+      '/api/v1/services/manifest/',
+      payload,
+      token,
+    );
+  }
 }

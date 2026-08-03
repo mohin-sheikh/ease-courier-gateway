@@ -1,13 +1,13 @@
 export class ManifestRequestDto {
-    customerCode!: string;
+  customerCode!: string;
 
-    orderNumber!: string;
+  orderNumber!: string;
 
-    courierPartner!: string;
+  courierPartner!: string;
 
-    customer!: unknown;
+  customer!: unknown;
 
-    address!: unknown;
+  address!: unknown;
 
-    items!: unknown;
+  items!: unknown;
 }

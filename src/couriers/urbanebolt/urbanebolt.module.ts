@@ -12,24 +12,22 @@ import { UrbaneboltManifestMapper } from './mapper/urbanebolt-manifest.mapper';
 import { CourierSharedModule } from '../shared/courier-shared.module';
 
 @Module({
-    imports: [
-        CourierSharedModule,
-    ],
-    providers: [
-        UrbaneboltApiClient,
-        UrbaneboltHttpClient,
-        UrbaneboltAuthClient,
-        UrbaneboltAuthService,
-        ManifestService,
-        UrbaneboltManifestMapper,
-    ],
-    exports: [
-        UrbaneboltApiClient,
-        UrbaneboltHttpClient,
-        UrbaneboltAuthClient,
-        UrbaneboltAuthService,
-        ManifestService,
-        UrbaneboltManifestMapper,
-    ],
+  imports: [CourierSharedModule],
+  providers: [
+    UrbaneboltApiClient,
+    UrbaneboltHttpClient,
+    UrbaneboltAuthClient,
+    UrbaneboltAuthService,
+    ManifestService,
+    UrbaneboltManifestMapper,
+  ],
+  exports: [
+    UrbaneboltApiClient,
+    UrbaneboltHttpClient,
+    UrbaneboltAuthClient,
+    UrbaneboltAuthService,
+    ManifestService,
+    UrbaneboltManifestMapper,
+  ],
 })
-export class UrbaneboltModule { }
+export class UrbaneboltModule {}

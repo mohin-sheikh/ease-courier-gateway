@@ -7,23 +7,15 @@ import { UrbaneboltAdapter } from '../adapters/urbanebolt.adapter';
 
 @Injectable()
 export class CourierFactory {
-    constructor(
-        private readonly urbaneboltAdapter: UrbaneboltAdapter,
-    ) { }
+  constructor(private readonly urbaneboltAdapter: UrbaneboltAdapter) {}
 
-    getCourier(
-        courier: CourierPartner,
-    ): CourierInterface {
+  getCourier(courier: CourierPartner): CourierInterface {
+    switch (courier) {
+      case CourierPartner.URBANEBOLT:
+        return this.urbaneboltAdapter;
 
-        switch (courier) {
-
-            case CourierPartner.URBANEBOLT:
-                return this.urbaneboltAdapter;
-
-            default:
-                throw new Error(
-                    `Unsupported courier ${courier}`,
-                );
-        }
+      default:
+        throw new Error(`Unsupported courier ${courier}`);
     }
+  }
 }

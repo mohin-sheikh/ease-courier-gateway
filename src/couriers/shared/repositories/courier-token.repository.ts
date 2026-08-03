@@ -7,24 +7,22 @@ import { CourierPartner } from '../../../common/enums/courier-partner.enum';
 
 @Injectable()
 export class CourierTokenRepository {
-    constructor(
-        @InjectRepository(CourierTokenEntity)
-        private readonly repository: Repository<CourierTokenEntity>,
-    ) { }
+  constructor(
+    @InjectRepository(CourierTokenEntity)
+    private readonly repository: Repository<CourierTokenEntity>,
+  ) {}
 
-    async findByCourier(
-        courier: CourierPartner,
-    ): Promise<CourierTokenEntity | null> {
-        return this.repository.findOne({
-            where: {
-                courier,
-            },
-        });
-    }
+  async findByCourier(
+    courier: CourierPartner,
+  ): Promise<CourierTokenEntity | null> {
+    return this.repository.findOne({
+      where: {
+        courier,
+      },
+    });
+  }
 
-    async save(
-        token: CourierTokenEntity,
-    ): Promise<CourierTokenEntity> {
-        return this.repository.save(token);
-    }
+  async save(token: CourierTokenEntity): Promise<CourierTokenEntity> {
+    return this.repository.save(token);
+  }
 }

@@ -1,9 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import {
-  DocumentBuilder,
-  SwaggerModule,
-} from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import compression from 'compression';
 import helmet from 'helmet';
@@ -11,9 +8,7 @@ import helmet from 'helmet';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-
-  const app =
-    await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule);
 
   app.use(helmet());
 
@@ -40,21 +35,11 @@ async function bootstrap() {
     .addTag('Health')
     .build();
 
-  const document =
-    SwaggerModule.createDocument(
-      app,
-      config,
-    );
+  const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup(
-    'docs',
-    app,
-    document,
-  );
+  SwaggerModule.setup('docs', app, document);
 
-  await app.listen(
-    process.env.PORT ?? 3000,
-  );
+  await app.listen(process.env.PORT ?? 3000);
 
   console.log(
     `Application running on http://localhost:${process.env.PORT ?? 3000}`,

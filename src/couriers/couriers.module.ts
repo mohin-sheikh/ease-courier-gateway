@@ -5,15 +5,8 @@ import { UrbaneboltAdapter } from './adapters/urbanebolt.adapter';
 import { UrbaneboltModule } from './urbanebolt/urbanebolt.module';
 
 @Module({
-    imports: [
-        UrbaneboltModule,
-    ],
-    providers: [
-        CourierFactory,
-        UrbaneboltAdapter,
-    ],
-    exports: [
-        CourierFactory,
-    ],
+  imports: [UrbaneboltModule],
+  providers: [CourierFactory, UrbaneboltAdapter],
+  exports: [CourierFactory],
 })
-export class CouriersModule { }
+export class CouriersModule {}

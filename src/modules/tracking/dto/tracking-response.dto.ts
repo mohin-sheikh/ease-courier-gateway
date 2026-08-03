@@ -1,16 +1,15 @@
 import { OrderStatus } from '../../../common/enums/order-status.enum';
 
 export class TrackingResponseDto {
+  orderId!: string;
 
-    orderId!: string;
+  trackingNumber!: string;
 
-    trackingNumber!: string;
+  currentStatus!: OrderStatus;
 
-    currentStatus!: OrderStatus;
+  location?: string;
 
-    location?: string;
+  remarks?: string;
 
-    remarks?: string;
-
-    updatedAt!: Date;
+  updatedAt!: Date;
 }

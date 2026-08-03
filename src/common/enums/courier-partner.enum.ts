@@ -1,4 +1,4 @@
 export enum CourierPartner {
-    URBANEBOLT = 'URBANEBOLT',
-    MOCK = 'MOCK',
+  URBANEBOLT = 'URBANEBOLT',
+  MOCK = 'MOCK',
 }

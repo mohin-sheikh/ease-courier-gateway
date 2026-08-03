@@ -1,10 +1,9 @@
 export class CreateShipmentResponseDto {
+  shipmentId!: string;
 
-    shipmentId!: string;
+  awbNumber!: string;
 
-    awbNumber!: string;
+  trackingNumber!: string;
 
-    trackingNumber!: string;
-
-    rawResponse!: unknown;
+  rawResponse!: unknown;
 }

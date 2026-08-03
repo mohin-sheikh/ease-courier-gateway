@@ -1,15 +1,15 @@
 export class ManifestResponseDto {
-    success!: boolean;
+  success!: boolean;
 
-    message!: string;
+  message!: string;
 
-    data!: {
-        shipmentId?: string;
+  data!: {
+    shipmentId?: string;
 
-        awbNumber?: string;
+    awbNumber?: string;
 
-        trackingNumber?: string;
-    };
+    trackingNumber?: string;
+  };
 
-    raw?: unknown;
+  raw?: unknown;
 }

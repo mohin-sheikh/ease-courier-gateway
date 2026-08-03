@@ -1,3 +1,3 @@
 export class UrbaneboltAuthResponseDto {
-    token!: string;
+  token!: string;
 }

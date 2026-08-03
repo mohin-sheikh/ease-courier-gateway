@@ -9,18 +9,9 @@ import { OrderMapper } from './mappers/order.mapper';
 import { CouriersModule } from '../../couriers/couriers.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      OrderEntity,
-    ]),
-    CouriersModule,
-  ],
+  imports: [TypeOrmModule.forFeature([OrderEntity]), CouriersModule],
   controllers: [OrdersController],
-  providers: [
-    OrdersService,
-    OrderRepository,
-    OrderMapper,
-  ],
+  providers: [OrdersService, OrderRepository, OrderMapper],
   exports: [OrderRepository],
 })
-export class OrdersModule { }
+export class OrdersModule {}

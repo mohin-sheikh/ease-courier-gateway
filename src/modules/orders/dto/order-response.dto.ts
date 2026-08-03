@@ -2,19 +2,19 @@ import { CourierPartner } from '../../../common/enums/courier-partner.enum';
 import { OrderStatus } from '../../../common/enums/order-status.enum';
 
 export class OrderResponseDto {
-    id!: string;
+  id!: string;
 
-    internalOrderId!: string;
+  internalOrderId!: string;
 
-    courierPartner!: CourierPartner;
+  courierPartner!: CourierPartner;
 
-    courierShipmentId?: string;
+  courierShipmentId?: string;
 
-    courierTrackingNumber?: string;
+  courierTrackingNumber?: string;
 
-    status!: OrderStatus;
+  status!: OrderStatus;
 
-    createdAt!: Date;
+  createdAt!: Date;
 
-    updatedAt!: Date;
+  updatedAt!: Date;
 }

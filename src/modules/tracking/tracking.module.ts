@@ -8,20 +8,9 @@ import { TrackingService } from './services/tracking.service';
 import { TrackingRepository } from './repositories/tracking.repository';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      TrackingHistoryEntity,
-    ]),
-  ],
-  controllers: [
-    TrackingController,
-  ],
-  providers: [
-    TrackingService,
-    TrackingRepository,
-  ],
-  exports: [
-    TrackingService,
-  ],
+  imports: [TypeOrmModule.forFeature([TrackingHistoryEntity])],
+  controllers: [TrackingController],
+  providers: [TrackingService, TrackingRepository],
+  exports: [TrackingService],
 })
-export class TrackingModule { }
+export class TrackingModule {}

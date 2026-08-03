@@ -4,11 +4,7 @@ import { RedisService } from '../couriers/shared/redis/redis.service';
 
 @Global()
 @Module({
-    providers: [
-        RedisService,
-    ],
-    exports: [
-        RedisService,
-    ],
+  providers: [RedisService],
+  exports: [RedisService],
 })
-export class SharedModule { }
+export class SharedModule {}

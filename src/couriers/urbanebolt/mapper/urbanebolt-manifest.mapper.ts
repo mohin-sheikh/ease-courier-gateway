@@ -5,23 +5,21 @@ import { ManifestRequestDto } from '../dto/manifest-request.dto';
 
 @Injectable()
 export class UrbaneboltManifestMapper {
+  map(dto: CreateOrderDto): ManifestRequestDto[] {
+    return [
+      {
+        customerCode: process.env.URBANEBOLT_CUSTOMER_CODE ?? '',
 
-    map(dto: CreateOrderDto): ManifestRequestDto[] {
+        orderNumber: dto.internalOrderId,
 
-        return [
-            {
-                customerCode: process.env.URBANEBOLT_CUSTOMER_CODE ?? '',
+        courierPartner: dto.courierPartner,
 
-                orderNumber: dto.internalOrderId,
+        customer: dto.customer,
 
-                courierPartner: dto.courierPartner,
+        address: dto.address,
 
-                customer: dto.customer,
-
-                address: dto.address,
-
-                items: dto.items,
-            },
-        ];
-    }
+        items: dto.items,
+      },
+    ];
+  }
 }

@@ -71,6 +71,7 @@ export class OrderRepository {
     async updateShipment(
         id: string,
         shipmentId: string,
+        awbNumber: string,
         trackingNumber: string,
         responsePayload: unknown,
     ): Promise<void> {
@@ -82,7 +83,11 @@ export class OrderRepository {
         }
 
         order.courierShipmentId = shipmentId;
+
+        order.awbNumber = awbNumber;
+
         order.courierTrackingNumber = trackingNumber;
+
         order.responsePayload =
             responsePayload as Record<string, unknown>;
 

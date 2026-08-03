@@ -3,5 +3,13 @@ export class ManifestResponseDto {
 
     message!: string;
 
-    data!: unknown;
+    data!: {
+        shipmentId?: string;
+
+        awbNumber?: string;
+
+        trackingNumber?: string;
+    };
+
+    raw?: unknown;
 }

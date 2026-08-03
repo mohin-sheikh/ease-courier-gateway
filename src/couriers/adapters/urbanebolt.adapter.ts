@@ -32,8 +32,15 @@ export class UrbaneboltAdapter implements CourierInterface {
         );
 
         return {
-            shipmentId: '',
-            trackingNumber: '',
+            shipmentId:
+                response.data?.shipmentId ?? '',
+
+            awbNumber:
+                response.data?.awbNumber ?? '',
+
+            trackingNumber:
+                response.data?.trackingNumber ?? '',
+
             rawResponse: response,
         };
     }

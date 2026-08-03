@@ -31,34 +31,26 @@ export class OrdersService {
             );
         }
 
-        const order =
-            await this.orderRepository.create({
-                internalOrderId: dto.internalOrderId,
-                courierPartner: dto.courierPartner,
-                requestPayload: JSON.parse(
-                    JSON.stringify(dto),
-                ),
-            });
+        const order = await this.orderRepository.create({
+            internalOrderId: dto.internalOrderId,
+            courierPartner: dto.courierPartner,
+            requestPayload: JSON.parse(JSON.stringify(dto)),
+        });
 
-        const courier =
-            this.courierFactory.getCourier(
-                dto.courierPartner,
-            );
+        const courier = this.courierFactory.getCourier(
+            dto.courierPartner,
+        );
 
-        const shipment =
-            await courier.createShipment(dto);
+        const shipment = await courier.createShipment(dto);
 
         await this.orderRepository.updateShipment(
             order.id,
             shipment.shipmentId,
+            shipment.awbNumber,
             shipment.trackingNumber,
             shipment.rawResponse,
         );
 
-        return (
-            await this.orderRepository.findById(
-                order.id,
-            )
-        )!;
+        return (await this.orderRepository.findById(order.id))!;
     }
 }

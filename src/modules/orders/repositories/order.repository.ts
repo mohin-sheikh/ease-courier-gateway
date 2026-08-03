@@ -70,20 +70,21 @@ export class OrderRepository {
 
     async updateShipment(
         id: string,
-        courierShipmentId: string,
-        courierTrackingNumber: string,
-        responsePayload: Record<string, unknown>,
+        shipmentId: string,
+        trackingNumber: string,
+        responsePayload: unknown,
     ): Promise<void> {
+
         const order = await this.findById(id);
 
         if (!order) {
-            return;
+            throw new Error(`Order ${id} not found.`);
         }
 
-        order.courierShipmentId = courierShipmentId;
-        order.courierTrackingNumber = courierTrackingNumber;
-        order.responsePayload = responsePayload;
-        order.status = OrderStatus.CREATED;
+        order.courierShipmentId = shipmentId;
+        order.courierTrackingNumber = trackingNumber;
+        order.responsePayload =
+            responsePayload as Record<string, unknown>;
 
         await this.repository.save(order);
     }

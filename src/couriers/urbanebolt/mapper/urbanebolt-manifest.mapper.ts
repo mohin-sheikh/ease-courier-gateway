@@ -1,13 +1,16 @@
 import { Injectable } from '@nestjs/common';
 
 import { CreateOrderDto } from '../../../modules/orders/dto/create-order.dto';
+import { ManifestRequestDto } from '../dto/manifest-request.dto';
 
 @Injectable()
 export class UrbaneboltManifestMapper {
-    map(dto: CreateOrderDto): Record<string, unknown>[] {
+
+    map(dto: CreateOrderDto): ManifestRequestDto[] {
+
         return [
             {
-                customerCode: process.env.URBANEBOLT_CUSTOMER_CODE,
+                customerCode: process.env.URBANEBOLT_CUSTOMER_CODE ?? '',
 
                 orderNumber: dto.internalOrderId,
 

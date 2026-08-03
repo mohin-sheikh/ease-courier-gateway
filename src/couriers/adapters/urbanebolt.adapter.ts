@@ -26,6 +26,11 @@ export class UrbaneboltAdapter implements CourierInterface {
                 payload,
             );
 
+        console.log(
+            'Urbanebolt Manifest Response:',
+            JSON.stringify(response, null, 2),
+        );
+
         return {
             shipmentId: '',
             trackingNumber: '',

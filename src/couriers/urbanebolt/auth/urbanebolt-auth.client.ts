@@ -25,7 +25,6 @@ export class UrbaneboltAuthClient {
         return this.httpClient.post<UrbaneboltAuthResponseDto>(
             '/api/v1/auth/getToken/',
             payload,
-            '',
         );
     }
 }

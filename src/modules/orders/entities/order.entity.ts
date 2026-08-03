@@ -16,7 +16,6 @@ import { OrderStatus } from '../../../common/enums/order-status.enum';
 @Index(['courierTrackingNumber'])
 export class OrderEntity extends BaseEntity {
     @Column({
-        unique: true,
         length: 100,
     })
     internalOrderId!: string;
@@ -37,7 +36,19 @@ export class OrderEntity extends BaseEntity {
         nullable: true,
         length: 100,
     })
+    awbNumber?: string;
+
+    @Column({
+        nullable: true,
+        length: 100,
+    })
     courierTrackingNumber?: string;
+
+    @Column({
+        nullable: true,
+        length: 50,
+    })
+    courierStatus?: string;
 
     @Column({
         type: 'enum',

@@ -15,15 +15,17 @@ export class UrbaneboltHttpClient {
     async post<T>(
         url: string,
         body: unknown,
-        token: string,
+        token?: string,
     ): Promise<T> {
         const response = await this.client.post<T>(
             url,
             body,
             {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                headers: token
+                    ? {
+                        Authorization: `Bearer ${token}`,
+                    }
+                    : {},
             },
         );
 

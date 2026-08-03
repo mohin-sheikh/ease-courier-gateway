@@ -1,98 +1,296 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Ease Courier Gateway
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A scalable courier aggregation service built with NestJS.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+The application provides a unified API for integrating multiple courier partners while keeping business logic independent from courier-specific implementations.
 
-## Description
+Currently, Urbanebolt is implemented as the first courier provider using the Factory and Adapter design patterns.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Project setup
+# Features
 
-```bash
-$ npm install
+- Unified Order Creation API
+- Courier Factory Pattern
+- Urbanebolt Adapter
+- PostgreSQL with TypeORM
+- Redis Token Caching
+- Swagger API Documentation
+- Docker Support
+- Database Migrations
+- Request Validation
+- Modular Architecture
+- Ready for Multiple Courier Integrations
+
+---
+
+# Tech Stack
+
+| Technology | Purpose |
+|------------|----------|
+| NestJS | Backend Framework |
+| TypeScript | Programming Language |
+| PostgreSQL | Database |
+| TypeORM | ORM |
+| Redis | Token Cache |
+| Axios | HTTP Client |
+| Swagger | API Documentation |
+| Docker | Local Infrastructure |
+
+---
+
+# Project Structure
+
+```
+src
+├── common
+├── config
+├── couriers
+│   ├── adapters
+│   ├── factory
+│   ├── interfaces
+│   ├── shared
+│   └── urbanebolt
+├── database
+├── modules
+│   ├── orders
+│   ├── tracking
+│   ├── batch
+│   └── audit
+├── queue
+└── shared
 ```
 
-## Compile and run the project
+---
+
+# Getting Started
+
+## Clone Repository
 
 ```bash
-# development
-$ npm run start
+git clone <repository-url>
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+cd ease-courier-gateway
 ```
 
-## Run tests
+---
+
+## Install Dependencies
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
-## Deployment
+---
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Start PostgreSQL and Redis
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+docker compose up -d
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+---
 
-## Resources
+## Configure Environment
 
-Check out a few resources that may come in handy when working with NestJS:
+Create a `.env` file from `.env.example`.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+---
 
-## Support
+## Run Database Migration
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+npm run db:migrate
+```
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Start Application
 
-## License
+```bash
+npm run start:dev
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+---
+
+# API Documentation
+
+Swagger UI
+
+```
+http://localhost:3000/docs
+```
+
+---
+
+# Available APIs
+
+## Health
+
+```
+GET /health
+```
+
+Returns application health.
+
+---
+
+## Orders
+
+```
+POST /orders
+```
+
+Creates a shipment using the configured courier partner.
+
+---
+
+# Sample Request
+
+```json
+{
+  "internalOrderId": "ORD-1001",
+  "courierPartner": "URBANEBOLT",
+  "idempotencyKey": "4c9f7c8b-1f4a-4a7d-9d8d-123456789abc",
+  "customer": {
+    "name": "John Doe",
+    "mobile": "9876543210",
+    "email": "john@example.com"
+  },
+  "address": {
+    "address": "MG Road",
+    "city": "Bangalore",
+    "state": "Karnataka",
+    "country": "India",
+    "pincode": "560001"
+  },
+  "items": [
+    {
+      "sku": "SKU-100",
+      "description": "Shoes",
+      "quantity": 1,
+      "price": 1500
+    }
+  ]
+}
+```
+
+---
+
+# Architecture
+
+```
+Client
+
+   │
+
+   ▼
+
+Orders Controller
+
+   │
+
+   ▼
+
+Orders Service
+
+   │
+
+   ▼
+
+Courier Factory
+
+   │
+
+   ▼
+
+Urbanebolt Adapter
+
+   │
+
+   ▼
+
+Manifest Service
+
+   │
+
+   ▼
+
+Urbanebolt API
+```
+
+---
+
+# Design Highlights
+
+- Factory Pattern for courier selection.
+- Adapter Pattern for courier-specific implementation.
+- Repository Pattern for database access.
+- Redis token caching to reduce authentication requests.
+- Modular structure for easy extension with additional courier providers.
+
+---
+
+# Database
+
+PostgreSQL is managed using TypeORM migrations.
+
+Migration commands
+
+```bash
+npm run db:generate --name=MigrationName
+```
+
+```bash
+npm run db:migrate
+```
+
+```bash
+npm run db:revert
+```
+
+---
+
+# Docker
+
+Start services
+
+```bash
+docker compose up -d
+```
+
+Stop services
+
+```bash
+docker compose down
+```
+
+---
+
+# Future Improvements
+
+- Shipment Tracking API
+- Shipment Cancellation API
+- Batch Shipment Processing
+- BullMQ Queue Workers
+- Webhook Support
+- Multiple Courier Integrations
+- Authentication & Authorization
+- Monitoring and Metrics
+
+---
+
+# Assignment Status
+
+Implemented
+
+- Order Creation
+- Courier Factory
+- Urbanebolt Integration
+- Token Management
+- PostgreSQL Integration
+- Redis Integration
+- Swagger Documentation
+- Docker Configuration
+- Database Migrations
+- Validation

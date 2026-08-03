@@ -39,7 +39,10 @@ export class OrdersService {
       courierPartner: dto.courierPartner,
       idempotencyKey: dto.idempotencyKey,
       status: OrderStatus.PENDING,
-      requestPayload: JSON.parse(JSON.stringify(dto)),
+      requestPayload: structuredClone(dto) as unknown as Record<
+        string,
+        unknown
+      >,
     });
 
     try {

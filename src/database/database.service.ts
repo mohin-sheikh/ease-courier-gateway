@@ -7,10 +7,12 @@ export class DatabaseService implements OnModuleInit {
 
   constructor(private readonly dataSource: DataSource) {}
 
-  async onModuleInit(): Promise<void> {
+  onModuleInit(): void {
     if (this.dataSource.isInitialized) {
       this.logger.log('PostgreSQL database connected successfully.');
-      this.logger.log(`Database: ${this.dataSource.options.database}`);
+      const database = String(this.dataSource.options.database ?? '');
+
+      this.logger.log(`Database: ${database}`);
     }
   }
 }

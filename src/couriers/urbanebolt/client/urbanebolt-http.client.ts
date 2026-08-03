@@ -24,9 +24,11 @@ export class UrbaneboltHttpClient {
 
       return response.data;
     } catch (error) {
-      console.error('Urbanebolt API Error:', error.response?.status);
+      if (axios.isAxiosError(error)) {
+        console.error('Urbanebolt API Error:', error.response?.status);
 
-      console.error(JSON.stringify(error.response?.data, null, 2));
+        console.error(JSON.stringify(error.response?.data, null, 2));
+      }
 
       throw error;
     }

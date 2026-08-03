@@ -2,91 +2,197 @@
 
 ## 1. Objective
 
-The Ease Courier Gateway is designed to provide a unified interface for integrating multiple courier partners through a single API.
+Ease Courier Gateway provides a unified API for integrating multiple courier partners through a single interface.
 
-Instead of exposing courier-specific APIs to clients, the gateway abstracts the implementation details behind a common interface, making it easy to add or replace courier providers without affecting the application.
+Instead of exposing courier-specific APIs to clients, the gateway hides courier implementations behind common abstractions. This allows new courier partners to be integrated with minimal changes to the core application.
 
-The current implementation integrates with Urbanebolt and is designed to support additional courier providers in the future.
+The current implementation integrates with **Urbanebolt** and is designed to support additional courier providers in the future.
 
 ---
 
 # 2. System Architecture
 
-```
+```text
                         Client
                            │
                            ▼
-                    Orders Controller
+                  Orders Controller
                            │
                            ▼
-                     Orders Service
+                   Orders Service
                            │
                            ▼
-                    Courier Factory
+                  Courier Factory
                            │
           ┌────────────────┴────────────────┐
           │                                 │
           ▼                                 ▼
- Urbanebolt Adapter                Future Courier
+ Urbanebolt Adapter                 Future Courier Adapter
           │
           ▼
-   Manifest Service
+     Manifest Service
           │
           ▼
- Urbanebolt API
+  Urbanebolt REST API
 ```
+
+The application follows a layered architecture where controllers handle HTTP requests, services contain business logic, repositories manage database operations, and adapters isolate courier-specific implementations.
 
 ---
 
-# 3. Request Flow
+# 3. Order Creation Flow
 
-1. Client sends a shipment creation request.
+```text
+Client
+   │
+   ▼
+POST /orders
+   │
+   ▼
+Validate Request
+   │
+   ▼
+Orders Service
+   │
+   ▼
+Store Order (PENDING)
+   │
+   ▼
+Courier Factory
+   │
+   ▼
+Urbanebolt Adapter
+   │
+   ▼
+Authentication Service
+   │
+   ▼
+Manifest API
+   │
+   ▼
+Update Order Status
+   │
+   ▼
+Return Response
+```
+
+Flow Summary
+
+1. Client submits a shipment request.
 2. Request is validated.
 3. Order is stored in PostgreSQL.
-4. Courier Factory selects the configured courier.
-5. Urbanebolt Adapter converts the request into Urbanebolt format.
+4. Factory selects the configured courier.
+5. Adapter converts the request into courier-specific format.
 6. Authentication token is obtained.
 7. Manifest API is called.
-8. Response is stored.
+8. Courier response is stored.
 9. Order status is updated.
 10. Response is returned to the client.
 
 ---
 
-# 4. Project Structure
+# 4. Bulk Order Flow
 
+```text
+Client
+   │
+   ▼
+POST /orders/bulk
+   │
+   ▼
+Validate Request
+   │
+   ▼
+Loop Through Orders
+   │
+   ▼
+Orders Service
+   │
+   ▼
+Courier Factory
+   │
+   ▼
+Urbanebolt
+   │
+   ▼
+Collect Results
+   │
+   ▼
+Return Summary
 ```
+
+Each order is processed independently. Successful and failed orders are returned separately in the response.
+
+---
+
+# 5. Authentication Flow
+
+```text
+Create Shipment
+       │
+       ▼
+Need Access Token
+       │
+       ▼
+Redis Cache
+       │
+ ┌─────┴─────┐
+ │           │
+ ▼           ▼
+Found     Not Found
+ │           │
+ ▼           ▼
+Use       Database
+Token        │
+             ▼
+      Valid Token?
+       │
+ ┌─────┴─────┐
+ │           │
+ ▼           ▼
+Yes         No
+ │           │
+ ▼           ▼
+Cache     Authenticate
+Redis     Urbanebolt
+ │           │
+ └─────┬─────┘
+       ▼
+Call Manifest API
+```
+
+The authentication flow minimizes unnecessary login requests by caching access tokens in Redis and persisting them in PostgreSQL.
+
+---
+
+# 6. Project Structure
+
+```text
 src
 │
 ├── common
-│
 ├── config
-│
 ├── couriers
 │   ├── adapters
 │   ├── factory
 │   ├── interfaces
 │   ├── shared
 │   └── urbanebolt
-│
 ├── database
-│
 ├── modules
 │   ├── orders
 │   ├── tracking
 │   ├── batch
 │   └── audit
-│
 ├── queue
-│
 └── shared
 ```
 
-The project follows a modular architecture where each feature is isolated into its own module.
+The project follows a modular architecture where each business domain is isolated into its own module.
 
 ---
 
-# 5. Database Design
+# 7. Database Design
 
 ## Orders
 
@@ -101,34 +207,35 @@ Important fields
 - Order Status
 - Request Payload
 - Response Payload
+- Idempotency Key
 
 ---
 
 ## Tracking History
 
-Stores shipment tracking events received from courier partners.
+Stores shipment tracking events for future tracking synchronization.
 
 ---
 
 ## Courier Tokens
 
-Stores authentication tokens for courier APIs.
+Stores authenticated courier access tokens.
 
 ---
 
 ## Batch
 
-Supports future batch shipment processing.
+Reserved for future batch shipment processing.
 
 ---
 
 ## Audit Log
 
-Stores important application events for debugging and auditing.
+Reserved for storing application audit events.
 
 ---
 
-# 6. Design Patterns
+# 8. Design Patterns
 
 ## Factory Pattern
 
@@ -138,114 +245,112 @@ Benefits
 
 - Easy to extend
 - Loose coupling
-- Single entry point
+- Centralized courier selection
 
 ---
 
 ## Adapter Pattern
 
-Each courier implements a common interface.
+Each courier implements a common interface while encapsulating provider-specific logic.
 
 Benefits
 
-- Courier-specific logic remains isolated.
-- Easy to onboard new courier partners.
+- Easy integration of new courier partners
+- No impact on business logic
+- Cleaner separation of responsibilities
 
 ---
 
 ## Repository Pattern
 
-Database operations are encapsulated inside repositories.
+Repositories encapsulate database operations.
 
 Benefits
 
 - Separation of concerns
+- Cleaner services
 - Easier testing
-- Cleaner business logic
 
 ---
 
-## 7. Authentication Flow
+# 9. Idempotency
 
-```
-               API Request
-                    │
-                    ▼
-        UrbaneboltAuthService
-                    │
-                    ▼
-          Check Redis Cache
-                    │
-         ┌──────────┴──────────┐
-         │                     │
-         ▼                     ▼
-   Token Exists         Token Not Found
-         │                     │
-         ▼                     ▼
-  Return Token         Check Database
-                               │
-                     ┌─────────┴─────────┐
-                     │                   │
-                     ▼                   ▼
-               Token Valid         Token Missing/Expired
-                     │                   │
-                     ▼                   ▼
-            Cache in Redis     Login to Urbanebolt API
-                     │                   │
-                     ▼                   ▼
-               Return Token      Save Token (DB + Redis)
-                                         │
-                                         ▼
-                                   Return Token
-```
+The Create Shipment API supports an optional **idempotencyKey**.
+
+If the same key is received multiple times, the existing order is returned instead of creating duplicate shipments.
+
+This prevents duplicate shipment creation caused by retries or network failures.
 
 ---
 
-# 8. Error Handling
+# 10. Error Handling
 
 The application validates all incoming requests before processing.
 
-Common scenarios
+Common scenarios handled
 
 - Duplicate orders
+- Duplicate idempotency requests
 - Invalid request payload
-- Authentication failure
+- Courier authentication failure
 - Courier API failure
 - Database exceptions
+- Shipment not found
 
 ---
 
-# 9. Scalability
+# 11. Technology Decisions
 
-The architecture is designed for future growth.
+| Technology | Reason |
+|------------|--------|
+| NestJS | Modular and scalable architecture |
+| PostgreSQL | Reliable relational database |
+| TypeORM | ORM with migration support |
+| Redis | Fast token caching |
+| Swagger | Interactive API documentation |
+| Docker | Consistent local development |
+| Axios | HTTP client for courier integrations |
 
-Possible enhancements
+---
 
-- Additional courier integrations
-- Background processing with BullMQ
-- Shipment tracking
+# 12. Scalability
+
+The architecture is designed to support future enhancements.
+
+Possible improvements
+
+- Additional courier providers
+- Shipment cancellation
+- Real-time shipment tracking
+- BullMQ background processing
+- Scheduled synchronization
 - Webhooks
-- Rate limiting
 - Monitoring
-- Authentication and authorization
+- Metrics
+- Authentication & Authorization
+- Rate limiting
 
 ---
 
-# 10. Assumptions
+# 13. Assumptions
 
-- PostgreSQL and Redis are available.
-- Courier credentials are provided through environment variables.
-- Courier APIs are reachable from the application.
+- PostgreSQL is available.
+- Redis is available.
+- Urbanebolt credentials are configured.
+- Courier APIs are reachable.
+- Requests are authenticated by the courier provider.
 
 ---
 
-# 11. Future Improvements
+# 14. Future Improvements
 
-- Shipment Tracking API
-- Shipment Cancellation
-- Batch Processing
-- Queue Workers
-- Retry Mechanism
+- Courier Cancellation API
+- Webhook Processing
+- Background Queue Workers
+- Automatic Retry Mechanism
 - Notification Service
-- Metrics and Monitoring
+- Multiple Courier Providers
+- Monitoring Dashboard
 - CI/CD Pipeline
+- Distributed Tracing
+- Centralized Logging

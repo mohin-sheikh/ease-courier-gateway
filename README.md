@@ -1,24 +1,27 @@
 # Ease Courier Gateway
 
-A scalable courier aggregation service built with NestJS.
+A scalable courier aggregation service built with **NestJS** that provides a unified API for integrating multiple courier partners.
 
-The application provides a unified API for integrating multiple courier partners while keeping business logic independent from courier-specific implementations.
+The application hides courier-specific implementations behind a common interface, making it easy to integrate additional courier providers without changing business logic.
 
-Currently, Urbanebolt is implemented as the first courier provider using the Factory and Adapter design patterns.
+Currently, **Urbanebolt** is implemented as the first courier partner using the **Factory** and **Adapter** design patterns.
 
 ---
 
 # Features
 
-- Unified Order Creation API
-- Courier Factory Pattern
-- Urbanebolt Adapter
+- Unified Shipment Creation API
+- Bulk Shipment Creation API
+- Shipment Tracking API
+- Factory Pattern for Courier Selection
+- Adapter Pattern for Courier Integration
 - PostgreSQL with TypeORM
 - Redis Token Caching
 - Swagger API Documentation
 - Docker Support
 - Database Migrations
 - Request Validation
+- Idempotency Support
 - Modular Architecture
 - Ready for Multiple Courier Integrations
 
@@ -35,13 +38,13 @@ Currently, Urbanebolt is implemented as the first courier provider using the Fac
 | Redis | Token Cache |
 | Axios | HTTP Client |
 | Swagger | API Documentation |
-| Docker | Local Infrastructure |
+| Docker | Local Development |
 
 ---
 
 # Project Structure
 
-```
+```text
 src
 ├── common
 ├── config
@@ -63,9 +66,44 @@ src
 
 ---
 
-# Getting Started
+# Prerequisites
 
-## Clone Repository
+Before running the application, make sure the following are installed:
+
+- Node.js 22+
+- npm
+- Docker
+- Docker Compose
+- PostgreSQL (or use Docker)
+- Redis (or use Docker)
+
+---
+
+# Environment Variables
+
+Create a `.env` file using `.env.example`.
+
+| Variable | Description |
+|----------|-------------|
+| PORT | Application Port |
+| DB_HOST | PostgreSQL Host |
+| DB_PORT | PostgreSQL Port |
+| DB_USERNAME | PostgreSQL Username |
+| DB_PASSWORD | PostgreSQL Password |
+| DB_DATABASE | Database Name |
+| REDIS_HOST | Redis Host |
+| REDIS_PORT | Redis Port |
+| REDIS_PASSWORD | Redis Password |
+| URBANEBOLT_BASE_URL | Urbanebolt Base URL |
+| URBANEBOLT_USERNAME | Urbanebolt Username |
+| URBANEBOLT_PASSWORD | Urbanebolt Password |
+| URBANEBOLT_CUSTOMER_CODE | Urbanebolt Customer Code |
+
+---
+
+# Installation
+
+Clone the repository.
 
 ```bash
 git clone <repository-url>
@@ -73,9 +111,7 @@ git clone <repository-url>
 cd ease-courier-gateway
 ```
 
----
-
-## Install Dependencies
+Install dependencies.
 
 ```bash
 npm install
@@ -83,7 +119,7 @@ npm install
 
 ---
 
-## Start PostgreSQL and Redis
+# Start PostgreSQL & Redis
 
 ```bash
 docker compose up -d
@@ -91,13 +127,7 @@ docker compose up -d
 
 ---
 
-## Configure Environment
-
-Create a `.env` file from `.env.example`.
-
----
-
-## Run Database Migration
+# Run Database Migration
 
 ```bash
 npm run db:migrate
@@ -105,17 +135,19 @@ npm run db:migrate
 
 ---
 
-## Start Application
+# Start the Application
 
 ```bash
 npm run start:dev
 ```
 
----
+Application
 
-# API Documentation
+```
+http://localhost:3000
+```
 
-Swagger UI
+Swagger
 
 ```
 http://localhost:3000/docs
@@ -131,21 +163,41 @@ http://localhost:3000/docs
 GET /health
 ```
 
-Returns application health.
+Returns the application health status.
 
 ---
 
-## Orders
+## Create Shipment
 
 ```
 POST /orders
 ```
 
-Creates a shipment using the configured courier partner.
+Creates a shipment using the selected courier partner.
 
 ---
 
-# Sample Request
+## Bulk Create Shipments
+
+```
+POST /orders/bulk
+```
+
+Creates multiple shipments in a single request.
+
+---
+
+## Track Shipment
+
+```
+GET /tracking/{trackingNumber}
+```
+
+Returns the latest shipment status for the provided tracking number.
+
+---
+
+# Sample Create Order Request
 
 ```json
 {
@@ -177,73 +229,114 @@ Creates a shipment using the configured courier partner.
 
 ---
 
-# Architecture
+# Authentication Flow
 
 ```
-Client
-
-   │
-
-   ▼
-
-Orders Controller
-
-   │
-
-   ▼
-
+Client Request
+      │
+      ▼
 Orders Service
+      │
+      ▼
+Need Access Token
+      │
+      ▼
+Redis Cache
+      │
+ ┌────┴────┐
+ │         │
+ ▼         ▼
+Found    Not Found
+ │         │
+ ▼         ▼
+Use      Database
+Token      │
+           ▼
+     Valid Token?
+      │
+ ┌────┴────┐
+ │         │
+ ▼         ▼
+Yes       No
+ │         │
+ ▼         ▼
+Cache   Authenticate
+Redis   with Urbanebolt
+ │         │
+ └────┬────┘
+      ▼
+Call Manifest API
+```
 
+---
+
+# Architecture
+
+```text
+Client
    │
-
    ▼
-
+Orders Controller
+   │
+   ▼
+Orders Service
+   │
+   ▼
 Courier Factory
-
    │
-
    ▼
-
 Urbanebolt Adapter
-
    │
-
    ▼
-
 Manifest Service
-
    │
-
    ▼
-
 Urbanebolt API
 ```
 
 ---
 
-# Design Highlights
+# Design Patterns
 
-- Factory Pattern for courier selection.
-- Adapter Pattern for courier-specific implementation.
-- Repository Pattern for database access.
-- Redis token caching to reduce authentication requests.
-- Modular structure for easy extension with additional courier providers.
+### Factory Pattern
+
+Selects the appropriate courier implementation based on the requested courier partner.
+
+### Adapter Pattern
+
+Encapsulates courier-specific implementation behind a common interface.
+
+### Repository Pattern
+
+Separates database access from business logic.
+
+---
+
+# Idempotency
+
+The Create Shipment API supports an optional **idempotencyKey**.
+
+If the same key is received multiple times, the existing order is returned instead of creating duplicate shipments.
 
 ---
 
 # Database
 
-PostgreSQL is managed using TypeORM migrations.
+The application uses **TypeORM Migrations**.
 
-Migration commands
+Generate Migration
 
 ```bash
 npm run db:generate --name=MigrationName
 ```
 
+Run Migration
+
 ```bash
 npm run db:migrate
 ```
+
+Rollback Migration
 
 ```bash
 npm run db:revert
@@ -251,15 +344,43 @@ npm run db:revert
 
 ---
 
+# Available Scripts
+
+Start Development Server
+
+```bash
+npm run start:dev
+```
+
+Build
+
+```bash
+npm run build
+```
+
+Run Linter
+
+```bash
+npm run lint
+```
+
+Run Tests
+
+```bash
+npm test
+```
+
+---
+
 # Docker
 
-Start services
+Start Services
 
 ```bash
 docker compose up -d
 ```
 
-Stop services
+Stop Services
 
 ```bash
 docker compose down
@@ -269,28 +390,32 @@ docker compose down
 
 # Future Improvements
 
-- Shipment Tracking API
-- Shipment Cancellation API
-- Batch Shipment Processing
+- Courier Cancellation API
+- Real-time Tracking Synchronization
 - BullMQ Queue Workers
+- Retry Mechanism
 - Webhook Support
-- Multiple Courier Integrations
+- Additional Courier Integrations
+- Monitoring & Metrics
 - Authentication & Authorization
-- Monitoring and Metrics
+- Rate Limiting
 
 ---
 
-# Assignment Status
+# Assignment Deliverables
 
-Implemented
-
-- Order Creation
-- Courier Factory
-- Urbanebolt Integration
-- Token Management
+- REST APIs using NestJS
 - PostgreSQL Integration
-- Redis Integration
+- Redis Token Caching
+- Urbanebolt Courier Integration
+- Factory Pattern
+- Adapter Pattern
+- Repository Pattern
 - Swagger Documentation
 - Docker Configuration
 - Database Migrations
-- Validation
+- Request Validation
+- Idempotency Support
+- Bulk Shipment API
+- Shipment Tracking API
+- Design Documentation

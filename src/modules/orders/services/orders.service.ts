@@ -67,4 +67,42 @@ export class OrdersService {
 
     return (await this.orderRepository.findById(order.id))!;
   }
+
+  async createBulk(orders: CreateOrderDto[]): Promise<{
+    successfulOrders: OrderEntity[];
+    failedOrders: {
+      internalOrderId: string;
+      error: string;
+    }[];
+  }> {
+    const results = await Promise.allSettled(
+      orders.map((order) => this.create(order)),
+    );
+
+    const successfulOrders: OrderEntity[] = [];
+
+    const failedOrders: {
+      internalOrderId: string;
+      error: string;
+    }[] = [];
+
+    results.forEach((result, index) => {
+      if (result.status === 'fulfilled') {
+        successfulOrders.push(result.value);
+      } else {
+        failedOrders.push({
+          internalOrderId: orders[index].internalOrderId,
+          error:
+            result.reason instanceof Error
+              ? result.reason.message
+              : 'Unknown error',
+        });
+      }
+    });
+
+    return {
+      successfulOrders,
+      failedOrders,
+    };
+  }
 }

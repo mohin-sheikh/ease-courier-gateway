@@ -1,8 +1,17 @@
-import { CreateShipmentDto } from '../dto/create-shipment.dto';
+import { CreateOrderDto } from '../../modules/orders/dto/create-order.dto';
 import { CreateShipmentResponseDto } from '../dto/create-shipment-response.dto';
 
-export interface CourierAdapter {
+export interface CourierInterface {
+
     createShipment(
-        dto: CreateShipmentDto,
+        dto: CreateOrderDto,
     ): Promise<CreateShipmentResponseDto>;
+
+    trackShipment(
+        shipmentId: string,
+    ): Promise<unknown>;
+
+    cancelShipment(
+        shipmentId: string,
+    ): Promise<void>;
 }

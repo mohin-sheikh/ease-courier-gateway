@@ -1,9 +1,8 @@
 export class CreateShipmentResponseDto {
-    courierShipmentId!: string;
 
-    courierTrackingNumber!: string;
+    shipmentId!: string;
 
-    status!: string;
+    trackingNumber!: string;
 
     rawResponse!: Record<string, unknown>;
 }

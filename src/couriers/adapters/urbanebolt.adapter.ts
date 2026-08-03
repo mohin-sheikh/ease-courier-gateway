@@ -1,18 +1,28 @@
 import { Injectable } from '@nestjs/common';
 
-import { CourierAdapter } from '../interfaces/courier.interface';
-import { CreateShipmentDto } from '../dto/create-shipment.dto';
+import { CourierInterface } from '../interfaces/courier.interface';
+import { CreateOrderDto } from '../../modules/orders/dto/create-order.dto';
 import { CreateShipmentResponseDto } from '../dto/create-shipment-response.dto';
 
 @Injectable()
-export class UrbaneboltAdapter implements CourierAdapter {
+export class UrbaneboltAdapter implements CourierInterface {
 
     async createShipment(
-        dto: CreateShipmentDto,
+        dto: CreateOrderDto,
     ): Promise<CreateShipmentResponseDto> {
 
-        throw new Error('Not implemented.');
-
+        return {
+            shipmentId: '',
+            trackingNumber: '',
+            rawResponse: {},
+        };
     }
 
+    async trackShipment(): Promise<unknown> {
+        return {};
+    }
+
+    async cancelShipment(): Promise<void> {
+        return;
+    }
 }

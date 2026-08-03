@@ -1,16 +1,25 @@
 import { IsNumber } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class ParcelDto {
 
-    @IsNumber()
+    @ApiProperty({
+        example: 2.5,
+    })
     weight!: number;
 
-    @IsNumber()
+    @ApiProperty({
+        example: 20,
+    })
     length!: number;
 
-    @IsNumber()
+    @ApiProperty({
+        example: 15,
+    })
     breadth!: number;
 
-    @IsNumber()
+    @ApiProperty({
+        example: 10,
+    })
     height!: number;
 }

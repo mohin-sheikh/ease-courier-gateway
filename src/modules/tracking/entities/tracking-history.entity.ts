@@ -14,6 +14,7 @@ import { OrderStatus } from '../../../common/enums/order-status.enum';
 @Index(['order'])
 @Index(['status'])
 export class TrackingHistoryEntity extends BaseEntity {
+
     @ManyToOne(() => OrderEntity, {
         nullable: false,
         onDelete: 'RESTRICT',
@@ -24,7 +25,6 @@ export class TrackingHistoryEntity extends BaseEntity {
     order!: OrderEntity;
 
     @Column({
-        name: 'status',
         type: 'enum',
         enum: OrderStatus,
     })

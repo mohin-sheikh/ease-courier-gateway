@@ -1,13 +1,20 @@
 import { IsDateString, IsNumber, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class InvoiceDto {
 
-    @IsString()
+    @ApiProperty({
+        example: 'INV-1001',
+    })
     invoiceNumber!: string;
 
-    @IsDateString()
+    @ApiProperty({
+        example: '2026-08-03',
+    })
     invoiceDate!: string;
 
-    @IsNumber()
+    @ApiProperty({
+        example: 2500,
+    })
     invoiceValue!: number;
 }

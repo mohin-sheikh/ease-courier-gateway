@@ -13,13 +13,18 @@ export class UrbaneboltAuthClient {
     ) { }
 
     async authenticate(): Promise<UrbaneboltAuthResponseDto> {
+        const username = this.configService.get<string>('URBANEBOLT_USERNAME');
+        const password = this.configService.get<string>('URBANEBOLT_PASSWORD');
+
+        if (!username || !password) {
+            throw new Error(
+                'Urbanebolt credentials are not configured.',
+            );
+        }
+
         const payload: UrbaneboltAuthRequestDto = {
-            username: this.configService.getOrThrow(
-                'URBANEBOLT_USERNAME',
-            ),
-            password: this.configService.getOrThrow(
-                'URBANEBOLT_PASSWORD',
-            ),
+            username,
+            password,
         };
 
         return this.httpClient.post<UrbaneboltAuthResponseDto>(

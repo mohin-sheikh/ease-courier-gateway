@@ -38,6 +38,7 @@ export class OrdersController {
         type: CreateOrderDto,
     })
     @ApiCreatedResponse({
+        description: 'Order created successfully.',
         type: CreateOrderResponseDto,
     })
     async create(

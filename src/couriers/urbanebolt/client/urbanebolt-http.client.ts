@@ -17,18 +17,36 @@ export class UrbaneboltHttpClient {
         body: unknown,
         token?: string,
     ): Promise<T> {
-        const response = await this.client.post<T>(
-            url,
-            body,
-            {
-                headers: token
-                    ? {
-                        Authorization: `Bearer ${token}`,
-                    }
-                    : {},
-            },
-        );
+        try {
+            const response = await this.client.post<T>(
+                url,
+                body,
+                {
+                    headers: token
+                        ? {
+                            Authorization: `Bearer ${token}`,
+                        }
+                        : {},
+                },
+            );
 
-        return response.data;
+            return response.data;
+        } catch (error: any) {
+
+            console.error(
+                'Urbanebolt API Error:',
+                error.response?.status,
+            );
+
+            console.error(
+                JSON.stringify(
+                    error.response?.data,
+                    null,
+                    2,
+                ),
+            );
+
+            throw error;
+        }
     }
 }

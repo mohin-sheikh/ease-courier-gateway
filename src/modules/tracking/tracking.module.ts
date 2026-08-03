@@ -6,9 +6,10 @@ import { TrackingHistoryEntity } from './entities/tracking-history.entity';
 import { TrackingController } from './controllers/tracking.controller';
 import { TrackingService } from './services/tracking.service';
 import { TrackingRepository } from './repositories/tracking.repository';
+import { OrdersModule } from '../orders/orders.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TrackingHistoryEntity])],
+  imports: [TypeOrmModule.forFeature([TrackingHistoryEntity]), OrdersModule],
   controllers: [TrackingController],
   providers: [TrackingService, TrackingRepository],
   exports: [TrackingService],

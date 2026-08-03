@@ -1,15 +1,21 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 import { OrderStatus } from '../../../common/enums/order-status.enum';
 
 export class TrackingResponseDto {
-  orderId!: string;
-
+  @ApiProperty()
   trackingNumber!: string;
 
-  currentStatus!: OrderStatus;
+  @ApiProperty()
+  shipmentId!: string;
 
-  location?: string;
+  @ApiProperty({
+    enum: OrderStatus,
+  })
+  status!: OrderStatus;
 
-  remarks?: string;
-
-  updatedAt!: Date;
+  @ApiProperty({
+    required: false,
+  })
+  courierStatus?: string;
 }

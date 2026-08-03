@@ -79,4 +79,14 @@ export class OrderRepository {
 
     await this.repository.save(order);
   }
+
+  async findByTrackingNumber(
+    trackingNumber: string,
+  ): Promise<OrderEntity | null> {
+    return this.repository.findOne({
+      where: {
+        courierTrackingNumber: trackingNumber,
+      },
+    });
+  }
 }

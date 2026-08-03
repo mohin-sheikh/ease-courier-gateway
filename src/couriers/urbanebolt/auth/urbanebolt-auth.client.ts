@@ -22,12 +22,10 @@ export class UrbaneboltAuthClient {
             ),
         };
 
-        const { data } =
-            await this.httpClient.post<UrbaneboltAuthResponseDto>(
-                '/api/v1/auth/getToken/',
-                payload,
-            );
-
-        return data;
+        return this.httpClient.post<UrbaneboltAuthResponseDto>(
+            '/api/v1/auth/getToken/',
+            payload,
+            '',
+        );
     }
 }
